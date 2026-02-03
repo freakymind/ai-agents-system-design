@@ -23,7 +23,7 @@ Create a new tool that agents can use to gather data and perform operations.
 **Endpoint:** `POST /api/tools`
 
 **Request Body:**
-```json
+\`\`\`json
 {
   "name": "Document Verification API",
   "description": "Verifies authenticity of business documents",
@@ -77,10 +77,10 @@ Create a new tool that agents can use to gather data and perform operations.
     "version": "1.0.0"
   }
 }
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -95,7 +95,7 @@ Create a new tool that agents can use to gather data and perform operations.
     "version": "1.0"
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -118,12 +118,12 @@ Get a paginated list of tools with filtering options.
 - `sortOrder` (string): Sort order (asc, desc)
 
 **Example Request:**
-```
+\`\`\`
 GET /api/tools?department=Compliance&status=active&page=1&pageSize=20&sortBy=name
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -157,7 +157,7 @@ GET /api/tools?department=Compliance&status=active&page=1&pageSize=20&sortBy=nam
     }
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -168,7 +168,7 @@ Get detailed information about a specific tool.
 **Endpoint:** `GET /api/tools/:toolId`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -188,7 +188,7 @@ Get detailed information about a specific tool.
     "monitoring": {...}
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -199,17 +199,17 @@ Execute a tool with test parameters to validate configuration.
 **Endpoint:** `POST /api/tools/:toolId/test`
 
 **Request Body:**
-```json
+\`\`\`json
 {
   "parameters": {
     "document_image": "base64_encoded_image_data",
     "document_type": "passport"
   }
 }
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -226,7 +226,7 @@ Execute a tool with test parameters to validate configuration.
     }
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -239,7 +239,7 @@ Create a new AI agent with assigned tools.
 **Endpoint:** `POST /api/agents`
 
 **Request Body:**
-```json
+\`\`\`json
 {
   "name": "Commercial KYC Agent",
   "description": "Performs comprehensive KYC checks for commercial customers",
@@ -287,10 +287,10 @@ Create a new AI agent with assigned tools.
     "version": "1.0.0"
   }
 }
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -300,7 +300,7 @@ Create a new AI agent with assigned tools.
     "createdAt": "2024-01-15T10:30:00Z"
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -331,7 +331,7 @@ Execute an agent with input data.
 **Endpoint:** `POST /api/agents/:agentId/execute`
 
 **Request Body:**
-```json
+\`\`\`json
 {
   "input": {
     "customerId": "CUS12345",
@@ -350,10 +350,10 @@ Execute an agent with input data.
     "referenceId": "ONB-2024-001"
   }
 }
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -364,7 +364,7 @@ Execute an agent with input data.
     "estimatedDuration": 45000
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -375,7 +375,7 @@ Check the status of an agent execution.
 **Endpoint:** `GET /api/executions/:executionId`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -413,7 +413,7 @@ Check the status of an agent execution.
     }
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -426,7 +426,7 @@ Import an existing AWS Bedrock Agent into BANKAI platform.
 **Endpoint:** `POST /api/integrations/aws-bedrock/import`
 
 **Request Body:**
-```json
+\`\`\`json
 {
   "agentId": "AGENT123456",
   "agentArn": "arn:aws:bedrock:us-east-1:123456789012:agent/AGENT123456",
@@ -441,10 +441,10 @@ Import an existing AWS Bedrock Agent into BANKAI platform.
     "teamId": "platform-team"
   }
 }
-```
+\`\`\`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -459,7 +459,7 @@ Import an existing AWS Bedrock Agent into BANKAI platform.
     "syncEnabled": true
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -470,7 +470,7 @@ Sync changes from AWS Bedrock Agent to BANKAI.
 **Endpoint:** `POST /api/integrations/aws-bedrock/:agentId/sync`
 
 **Response:**
-```json
+\`\`\`json
 {
   "success": true,
   "data": {
@@ -483,7 +483,7 @@ Sync changes from AWS Bedrock Agent to BANKAI.
     "lastSyncedAt": "2024-01-15T10:30:00Z"
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -492,10 +492,10 @@ Sync changes from AWS Bedrock Agent to BANKAI.
 All API requests require authentication using Bearer tokens.
 
 **Headers:**
-```
+\`\`\`
 Authorization: Bearer <your_api_token>
 Content-Type: application/json
-```
+\`\`\`
 
 **Rate Limits:**
 - Standard: 100 requests per minute

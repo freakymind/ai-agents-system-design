@@ -16,9 +16,9 @@ Complete guide for executing agents via API and understanding audit trail respon
 
 All API requests require Bearer token authentication:
 
-```bash
+\`\`\`bash
 Authorization: Bearer YOUR_API_TOKEN
-```
+\`\`\`
 
 Contact your BANKAI administrator to obtain an API token.
 
@@ -27,13 +27,13 @@ Contact your BANKAI administrator to obtain an API token.
 ## Executing Agents
 
 ### Endpoint
-```
+\`\`\`
 POST /api/agents/{agentId}/execute
-```
+\`\`\`
 
 ### Request Body
 
-```json
+\`\`\`json
 {
   "input": {
     "customerName": "Acme Corporation Ltd",
@@ -54,7 +54,7 @@ POST /api/agents/{agentId}/execute
     "department": "onboarding"
   }
 }
-```
+\`\`\`
 
 ### Request Parameters
 
@@ -73,7 +73,7 @@ POST /api/agents/{agentId}/execute
 
 ### Successful Execution
 
-```json
+\`\`\`json
 {
   "executionId": "exec_20240315_abc123",
   "agentId": "agent_kyc_001",
@@ -296,11 +296,11 @@ POST /api/agents/{agentId}/execute
     "complianceFlags": ["KYC", "AML"]
   }
 }
-```
+\`\`\`
 
 ### Failed Execution
 
-```json
+\`\`\`json
 {
   "executionId": "exec_20240315_xyz789",
   "agentId": "agent_kyc_001",
@@ -387,7 +387,7 @@ POST /api/agents/{agentId}/execute
     "complianceFlags": ["KYC", "AML"]
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -395,7 +395,7 @@ POST /api/agents/{agentId}/execute
 
 ### Node.js / JavaScript
 
-```javascript
+\`\`\`javascript
 const BANKAI_API_URL = 'https://bankai.yourbank.com/api';
 const API_TOKEN = process.env.BANKAI_API_TOKEN;
 
@@ -466,11 +466,11 @@ executeAgent('agent_kyc_001', inputData)
   .catch(error => {
     console.error('Agent execution failed:', error);
   });
-```
+\`\`\`
 
 ### Python
 
-```python
+\`\`\`python
 import requests
 import os
 import json
@@ -564,11 +564,11 @@ if __name__ == '__main__':
             
     except Exception as e:
         print(f"Agent execution failed: {e}")
-```
+\`\`\`
 
 ### cURL
 
-```bash
+\`\`\`bash
 curl -X POST https://bankai.yourbank.com/api/agents/agent_kyc_001/execute \
   -H "Authorization: Bearer YOUR_API_TOKEN" \
   -H "Content-Type: application/json" \
@@ -589,7 +589,7 @@ curl -X POST https://bankai.yourbank.com/api/agents/agent_kyc_001/execute \
       "department": "onboarding"
     }
   }'
-```
+\`\`\`
 
 ---
 
@@ -653,7 +653,7 @@ Every agent execution creates a comprehensive audit trail that includes:
 
 ### Retry Strategy
 
-```javascript
+\`\`\`javascript
 async function executeWithRetry(agentId, inputData, maxRetries = 3) {
   let lastError;
   
@@ -681,7 +681,7 @@ async function executeWithRetry(agentId, inputData, maxRetries = 3) {
   
   throw lastError;
 }
-```
+\`\`\`
 
 ---
 

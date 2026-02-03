@@ -31,7 +31,7 @@ BANKAI supports importing and managing agents built with AWS Bedrock Agent Core,
 
 ## Architecture
 
-```
+\`\`\`
 ┌─────────────────────────────────────────────────────────────┐
 │                        BANKAI Platform                       │
 │  ┌────────────────────────────────────────────────────────┐ │
@@ -60,7 +60,7 @@ BANKAI supports importing and managing agents built with AWS Bedrock Agent Core,
 │  │  - Knowledge Bases                                      │ │
 │  └────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
-```
+\`\`\`
 
 ---
 
@@ -70,7 +70,7 @@ BANKAI supports importing and managing agents built with AWS Bedrock Agent Core,
 
 Create a JSON file describing your Bedrock agent:
 
-```json
+\`\`\`json
 {
   "agentId": "AGENT123456",
   "agentArn": "arn:aws:bedrock:us-east-1:123456789012:agent/AGENT123456",
@@ -104,13 +104,13 @@ Create a JSON file describing your Bedrock agent:
     }
   ]
 }
-```
+\`\`\`
 
 ### 1.2 Create IAM User for BANKAI
 
 Create a dedicated IAM user with minimal permissions:
 
-```json
+\`\`\`json
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -128,7 +128,7 @@ Create a dedicated IAM user with minimal permissions:
     }
   ]
 }
-```
+\`\`\`
 
 ---
 
@@ -141,7 +141,7 @@ Each Bedrock Action Group needs to be mapped to a BANKAI tool.
 For each action group in your Bedrock agent, create a corresponding tool in BANKAI:
 
 **Bedrock Action Group:**
-```json
+\`\`\`json
 {
   "actionGroupName": "CreditBureauAPI",
   "apiSchema": {
@@ -154,10 +154,10 @@ For each action group in your Bedrock agent, create a corresponding tool in BANK
     }
   }
 }
-```
+\`\`\`
 
 **BANKAI Tool (via API or UI):**
-```json
+\`\`\`json
 {
   "name": "Credit Bureau API",
   "type": "api",
@@ -183,13 +183,13 @@ For each action group in your Bedrock agent, create a corresponding tool in BANK
     "tags": ["credit", "risk", "bureau"]
   }
 }
-```
+\`\`\`
 
 ### 2.2 Create Parameter Mapping
 
 Document how parameters map between systems:
 
-```json
+\`\`\`json
 {
   "mappings": [
     {
@@ -206,7 +206,7 @@ Document how parameters map between systems:
     }
   ]
 }
-```
+\`\`\`
 
 ---
 
@@ -214,7 +214,7 @@ Document how parameters map between systems:
 
 ### 3.1 Via API
 
-```bash
+\`\`\`bash
 curl -X POST https://bankai.yourbank.com/api/integrations/aws-bedrock/import \
   -H "Authorization: Bearer YOUR_API_TOKEN" \
   -H "Content-Type: application/json" \
@@ -238,7 +238,7 @@ curl -X POST https://bankai.yourbank.com/api/integrations/aws-bedrock/import \
       "teamId": "risk-assessment-team"
     }
   }'
-```
+\`\`\`
 
 ### 3.2 Via BANKAI UI
 
@@ -258,7 +258,7 @@ curl -X POST https://bankai.yourbank.com/api/integrations/aws-bedrock/import \
 
 ### 4.1 Set Agent Metadata
 
-```json
+\`\`\`json
 {
   "name": "Commercial Credit Risk Agent",
   "description": "Assesses credit risk for commercial customers using AWS Bedrock",
@@ -274,11 +274,11 @@ curl -X POST https://bankai.yourbank.com/api/integrations/aws-bedrock/import \
     }
   }
 }
-```
+\`\`\`
 
 ### 4.2 Configure Execution Settings
 
-```json
+\`\`\`json
 {
   "configuration": {
     "maxExecutionTime": 120000,
@@ -287,7 +287,7 @@ curl -X POST https://bankai.yourbank.com/api/integrations/aws-bedrock/import \
     "errorHandling": "stop"
   }
 }
-```
+\`\`\`
 
 ---
 
@@ -295,17 +295,17 @@ curl -X POST https://bankai.yourbank.com/api/integrations/aws-bedrock/import \
 
 ### 5.1 Execution Flow
 
-```
+\`\`\`
 User Request → BANKAI Platform → Adapter → AWS Bedrock → Response
                       ↓
               Audit Logging
               Monitoring
               Governance
-```
+\`\`\`
 
 ### 5.2 Execute via API
 
-```bash
+\`\`\`bash
 curl -X POST https://bankai.yourbank.com/api/agents/agent_bedrock_123/execute \
   -H "Authorization: Bearer YOUR_API_TOKEN" \
   -H "Content-Type: application/json" \
@@ -317,7 +317,7 @@ curl -X POST https://bankai.yourbank.com/api/agents/agent_bedrock_123/execute \
     },
     "priority": "high"
   }'
-```
+\`\`\`
 
 ### 5.3 Behind the Scenes
 
@@ -345,10 +345,10 @@ All executions are logged in BANKAI with:
 
 ### 6.2 Access Audit Logs
 
-```bash
+\`\`\`bash
 curl https://bankai.yourbank.com/api/audit?agentId=agent_bedrock_123 \
   -H "Authorization: Bearer YOUR_API_TOKEN"
-```
+\`\`\`
 
 ---
 
@@ -358,7 +358,7 @@ curl https://bankai.yourbank.com/api/audit?agentId=agent_bedrock_123 \
 
 Enable automatic synchronization between Bedrock and BANKAI:
 
-```json
+\`\`\`json
 {
   "syncConfig": {
     "enabled": true,
@@ -367,13 +367,13 @@ Enable automatic synchronization between Bedrock and BANKAI:
     "conflictResolution": "bedrock_wins"
   }
 }
-```
+\`\`\`
 
 ### Hybrid Execution
 
 Execute some tools in Bedrock, others in BANKAI:
 
-```json
+\`\`\`json
 {
   "executionStrategy": "hybrid",
   "toolExecution": {
@@ -382,7 +382,7 @@ Execute some tools in Bedrock, others in BANKAI:
     "Fraud Detection": "bankai"
   }
 }
-```
+\`\`\`
 
 ---
 
