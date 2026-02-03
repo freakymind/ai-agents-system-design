@@ -1,10 +1,13 @@
 'use client'
 
+import Link from "next/link"
+import { CheckCircle } from 'lucide-react';
+
 import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
-import { Book, Code, Cloud, FileText, Download, ExternalLink, Search, BookOpen, Layers, Zap } from 'lucide-react'
+import { Book, Code, Cloud, FileText, Download, ExternalLink, Search, BookOpen, Layers, Zap, PlayCircle } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 
 export default function DocumentationPage() {
@@ -53,11 +56,15 @@ export default function DocumentationPage() {
               <Zap className="w-4 h-4 mr-2" />
               Agents
             </TabsTrigger>
+            <TabsTrigger value="execution" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-indigo-600 data-[state=active]:text-white">
+              <PlayCircle className="w-4 h-4 mr-2" />
+              Execution & Audit
+            </TabsTrigger>
             <TabsTrigger value="api" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-indigo-600 data-[state=active]:text-white">
               <Code className="w-4 h-4 mr-2" />
               API Reference
             </TabsTrigger>
-            <TabsTrigger value="aws" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state=active]:to-indigo-600 data-[state=active]:text-white">
+            <TabsTrigger value="aws" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-600 data-[state-active]:to-indigo-600 data-[state=active]:text-white">
               <Cloud className="w-4 h-4 mr-2" />
               AWS Integration
             </TabsTrigger>
@@ -241,6 +248,282 @@ export default function DocumentationPage() {
                 <div className="flex gap-4">
                   <code className="bg-slate-100 px-2 py-1 rounded text-blue-600 font-mono">retryAttempts</code>
                   <span className="text-slate-600">Number of retry attempts on failure</span>
+                </div>
+              </div>
+            </Card>
+          </TabsContent>
+
+          {/* Execution & Audit Tab */}
+          <TabsContent value="execution" className="space-y-6">
+            <Card className="p-8 bg-white border-slate-200">
+              <h2 className="text-2xl font-bold mb-4 text-slate-900">Executing Agents via API</h2>
+              <p className="text-slate-600 mb-6">
+                Execute agents programmatically and receive comprehensive audit trails with every execution.
+              </p>
+
+              <div className="space-y-6">
+                <div className="border border-slate-200 rounded-lg p-6">
+                  <h3 className="font-semibold mb-3 text-slate-900">API Endpoint</h3>
+                  <code className="bg-slate-900 text-slate-100 px-4 py-2 rounded block">
+                    POST /api/agents/:agentId/execute
+                  </code>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-6">
+                  <h3 className="font-semibold mb-3 text-slate-900">Request Example (Node.js)</h3>
+                  <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto text-sm">
+{`const response = await fetch(\`\${BANKAI_API_URL}/agents/\${agentId}/execute\`, {
+  method: 'POST',
+  headers: {
+    'Authorization': \`Bearer \${API_TOKEN}\`,
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    input: {
+      customerName: 'Acme Corporation Ltd',
+      businessNumber: '12345678',
+      riskProfile: 'medium'
+    },
+    options: {
+      executionMode: 'sequential',
+      returnDetailedLogs: true
+    },
+    metadata: {
+      requestId: 'req_abc123',
+      userId: 'user_xyz789',
+      department: 'onboarding'
+    }
+  })
+});
+
+const result = await response.json();`}
+                  </pre>
+                </div>
+
+                <div className="border border-slate-200 rounded-lg p-6">
+                  <h3 className="font-semibold mb-3 text-slate-900">Complete Audit Response</h3>
+                  <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto text-sm max-h-96">
+{`{
+  "executionId": "exec_20240315_abc123",
+  "agentId": "agent_kyc_001",
+  "agentName": "Commercial KYC Agent",
+  "status": "completed",
+  "startTime": "2024-03-15T10:30:00.000Z",
+  "endTime": "2024-03-15T10:30:12.345Z",
+  "duration": 12345,
+  
+  "input": {
+    "customerName": "Acme Corporation Ltd",
+    "businessNumber": "12345678",
+    "riskProfile": "medium"
+  },
+  
+  "output": {
+    "decision": "approved",
+    "confidence": 0.92,
+    "riskScore": 35,
+    "recommendations": [
+      "Standard onboarding process approved"
+    ]
+  },
+  
+  "toolExecutions": [
+    {
+      "toolId": "tool_doc_verify_001",
+      "toolName": "Document Verification API",
+      "mandatory": true,
+      "status": "completed",
+      "startTime": "2024-03-15T10:30:00.123Z",
+      "endTime": "2024-03-15T10:30:05.456Z",
+      "duration": 5333,
+      "input": { "document_image": "[REDACTED]" },
+      "output": {
+        "valid": true,
+        "confidence": 0.95
+      },
+      "logs": [
+        {
+          "timestamp": "2024-03-15T10:30:00.123Z",
+          "level": "info",
+          "message": "Starting document verification"
+        },
+        {
+          "timestamp": "2024-03-15T10:30:05.456Z",
+          "level": "info",
+          "message": "Verification completed"
+        }
+      ],
+      "apiCalls": [
+        {
+          "url": "https://api.docverify.com/v2/verify",
+          "method": "POST",
+          "statusCode": 200,
+          "duration": 4890
+        }
+      ]
+    },
+    {
+      "toolId": "tool_business_registry_002",
+      "toolName": "Business Registry Check",
+      "mandatory": true,
+      "status": "completed",
+      "duration": 2734,
+      "output": {
+        "found": true,
+        "status": "active"
+      }
+    },
+    {
+      "toolId": "tool_sanctions_003",
+      "toolName": "Sanctions Screening",
+      "mandatory": false,
+      "status": "completed",
+      "duration": 3800,
+      "output": {
+        "matches": 0,
+        "riskLevel": "low"
+      }
+    }
+  ],
+  
+  "metrics": {
+    "totalTools": 3,
+    "mandatoryTools": 2,
+    "optionalTools": 1,
+    "successfulTools": 3,
+    "failedTools": 0,
+    "totalApiCalls": 3,
+    "avgToolDuration": 4122
+  },
+  
+  "audit": {
+    "executionId": "exec_20240315_abc123",
+    "userId": "user_xyz789",
+    "department": "onboarding",
+    "requestId": "req_abc123",
+    "timestamp": "2024-03-15T10:30:00.000Z",
+    "dataClassification": "confidential",
+    "retentionPeriod": "7 years",
+    "complianceFlags": ["KYC", "AML"]
+  }
+}`}
+                  </pre>
+                </div>
+
+                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-100">
+                  <h4 className="font-semibold mb-3 text-slate-900">What You Get</h4>
+                  <ul className="space-y-2 text-sm text-slate-700">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span><strong>Complete Execution Data:</strong> Input, output, timestamps, duration</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span><strong>Tool-by-Tool Breakdown:</strong> Individual tool execution details and performance</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span><strong>API Call Tracking:</strong> All external API calls with status codes and timing</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span><strong>Detailed Logs:</strong> Step-by-step execution logs for debugging</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span><strong>Compliance Info:</strong> Data classification, retention, and audit flags</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                      <span><strong>Performance Metrics:</strong> Success rates, durations, and system health</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <a 
+                    href="/docs/api-execution-guide.md" 
+                    download
+                    className="block"
+                  >
+                    <Button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                      <Download className="w-4 h-4 mr-2" />
+                      Download Full Guide
+                    </Button>
+                  </a>
+                  <Link href="/audit">
+                    <Button className="w-full bg-transparent" variant="outline">
+                      View Live Executions
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </Card>
+
+            <Card className="p-8 bg-white border-slate-200">
+              <h3 className="text-xl font-semibold mb-4 text-slate-900">Code Examples</h3>
+              
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-semibold mb-3 text-slate-900">Python Example</h4>
+                  <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto text-sm">
+{`import requests
+
+def execute_agent(agent_id, input_data):
+    url = f'{BANKAI_API_URL}/agents/{agent_id}/execute'
+    headers = {
+        'Authorization': f'Bearer {API_TOKEN}',
+        'Content-Type': 'application/json'
+    }
+    
+    payload = {
+        'input': input_data,
+        'options': {
+            'executionMode': 'sequential',
+            'returnDetailedLogs': True
+        }
+    }
+    
+    response = requests.post(url, headers=headers, json=payload)
+    response.raise_for_status()
+    
+    result = response.json()
+    
+    # Access audit trail
+    print(f"Execution ID: {result['executionId']}")
+    print(f"Status: {result['status']}")
+    print(f"Duration: {result['duration']}ms")
+    
+    # Tool execution details
+    for tool in result['toolExecutions']:
+        print(f"\\nTool: {tool['toolName']}")
+        print(f"  Status: {tool['status']}")
+        print(f"  Duration: {tool['duration']}ms")
+    
+    return result`}
+                  </pre>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-3 text-slate-900">Error Handling</h4>
+                  <pre className="bg-slate-900 text-slate-100 p-4 rounded-lg overflow-x-auto text-sm">
+{`// Retry logic with exponential backoff
+async function executeWithRetry(agentId, inputData, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await executeAgent(agentId, inputData);
+    } catch (error) {
+      if (error.code === 'INVALID_INPUT') throw error;
+      
+      if (attempt < maxRetries) {
+        const delay = Math.pow(2, attempt) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+      }
+    }
+  }
+}`}
+                  </pre>
                 </div>
               </div>
             </Card>

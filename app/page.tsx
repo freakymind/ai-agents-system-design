@@ -11,29 +11,64 @@ import {
   TrendingUp,
   AlertTriangle,
   CheckCircle,
-  Shield,
+  XCircle,
   Zap,
   ArrowUpRight,
+  ArrowDownRight,
   Clock,
   Target,
   BarChart3,
+  PlayCircle,
+  Settings,
+  AlertCircle,
 } from "lucide-react"
 import Link from "next/link"
 
 export default function Dashboard() {
   const [stats] = useState({
     totalAgents: 12,
-    activeTools: 18,
+    activeAgents: 10,
+    totalTools: 18,
+    activeTools: 16,
     executionsToday: 2847,
-    fraudDetected: 34,
-    complianceScore: 98.5,
+    successfulExecutions: 2721,
+    failedExecutions: 126,
     avgResponseTime: 1.8,
+    systemHealth: 96.4,
   })
 
-  const recentAlerts = [
-    { type: "fraud", message: "High-risk transaction detected", severity: "critical", time: "2 min ago" },
-    { type: "compliance", message: "Adverse media found for entity", severity: "warning", time: "15 min ago" },
-    { type: "kyc", message: "Document verification pending", severity: "info", time: "1 hour ago" },
+  const recentIssues = [
+    { 
+      agent: "KYC Verification Agent", 
+      tool: "Document OCR", 
+      message: "Tool execution timeout - increased latency detected", 
+      severity: "critical", 
+      time: "2 min ago",
+      executionId: "exec_abc123"
+    },
+    { 
+      agent: "Risk Assessment Agent", 
+      tool: "Credit Bureau API", 
+      message: "API rate limit exceeded - 429 response", 
+      severity: "warning", 
+      time: "15 min ago",
+      executionId: "exec_def456"
+    },
+    { 
+      agent: "Compliance Agent", 
+      tool: "Sanctions Database", 
+      message: "Slow response time - 8.2s (threshold: 5s)", 
+      severity: "warning", 
+      time: "1 hour ago",
+      executionId: "exec_ghi789"
+    },
+  ]
+
+  const agentPerformance = [
+    { name: "KYC Verification Agent", runs: 847, success: 92.3, avgTime: 2.1, issues: 2, status: "warning" },
+    { name: "Fraud Detection Agent", runs: 1203, success: 98.7, avgTime: 1.3, issues: 0, status: "healthy" },
+    { name: "Risk Assessment Agent", runs: 562, success: 89.1, avgTime: 3.8, issues: 5, status: "critical" },
+    { name: "Compliance Agent", runs: 235, success: 95.4, avgTime: 1.9, issues: 1, status: "healthy" },
   ]
 
   return (
@@ -41,25 +76,43 @@ export default function Dashboard() {
       <div className="container mx-auto px-6 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">Banking Intelligence Platform</h1>
-          <p className="text-muted-foreground text-lg">Real-time monitoring of AI agents and banking operations</p>
+          <h1 className="text-4xl font-bold text-foreground mb-2">Agent Operations Dashboard</h1>
+          <p className="text-muted-foreground text-lg">Monitor agent executions, tool performance, and system health</p>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border-blue-500/20 hover:border-blue-500/40 transition-all">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Active Agents</p>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Total Agents</p>
                   <p className="text-4xl font-bold text-foreground mb-1">{stats.totalAgents}</p>
-                  <div className="flex items-center gap-1 text-emerald-500 text-sm">
-                    <ArrowUpRight className="w-4 h-4" />
-                    <span>+3 this week</span>
+                  <div className="flex items-center gap-1 text-blue-500 text-sm">
+                    <Users className="w-3 h-3" />
+                    <span>{stats.activeAgents} active</span>
                   </div>
                 </div>
                 <div className="p-3 bg-blue-500/10 rounded-lg">
                   <Users className="w-6 h-6 text-blue-500" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-purple-500/20 hover:border-purple-500/40 transition-all">
+            <CardContent className="p-6">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Total Tools</p>
+                  <p className="text-4xl font-bold text-foreground mb-1">{stats.totalTools}</p>
+                  <div className="flex items-center gap-1 text-purple-500 text-sm">
+                    <Zap className="w-3 h-3" />
+                    <span>{stats.activeTools} active</span>
+                  </div>
+                </div>
+                <div className="p-3 bg-purple-500/10 rounded-lg">
+                  <Settings className="w-6 h-6 text-purple-500" />
                 </div>
               </div>
             </CardContent>
@@ -72,30 +125,30 @@ export default function Dashboard() {
                   <p className="text-sm font-medium text-muted-foreground mb-1">Executions Today</p>
                   <p className="text-4xl font-bold text-foreground mb-1">{stats.executionsToday.toLocaleString()}</p>
                   <div className="flex items-center gap-1 text-emerald-500 text-sm">
-                    <ArrowUpRight className="w-4 h-4" />
+                    <ArrowUpRight className="w-3 h-3" />
                     <span>+12% vs yesterday</span>
                   </div>
                 </div>
                 <div className="p-3 bg-emerald-500/10 rounded-lg">
-                  <Activity className="w-6 h-6 text-emerald-500" />
+                  <PlayCircle className="w-6 h-6 text-emerald-500" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-amber-500/20 hover:border-amber-500/40 transition-all">
+          <Card className="bg-gradient-to-br from-rose-500/10 to-rose-600/5 border-rose-500/20 hover:border-rose-500/40 transition-all">
             <CardContent className="p-6">
               <div className="flex items-start justify-between">
                 <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-1">Fraud Detected</p>
-                  <p className="text-4xl font-bold text-foreground mb-1">{stats.fraudDetected}</p>
-                  <div className="flex items-center gap-1 text-amber-500 text-sm">
-                    <AlertTriangle className="w-4 h-4" />
-                    <span>Requires review</span>
+                  <p className="text-sm font-medium text-muted-foreground mb-1">Failed Executions</p>
+                  <p className="text-4xl font-bold text-foreground mb-1">{stats.failedExecutions}</p>
+                  <div className="flex items-center gap-1 text-rose-500 text-sm">
+                    <ArrowDownRight className="w-3 h-3" />
+                    <span>4.4% failure rate</span>
                   </div>
                 </div>
-                <div className="p-3 bg-amber-500/10 rounded-lg">
-                  <Shield className="w-6 h-6 text-amber-500" />
+                <div className="p-3 bg-rose-500/10 rounded-lg">
+                  <XCircle className="w-6 h-6 text-rose-500" />
                 </div>
               </div>
             </CardContent>
@@ -104,18 +157,18 @@ export default function Dashboard() {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Column - Agent Status */}
+          {/* Left Column - Agent Performance */}
           <div className="lg:col-span-2 space-y-6">
             <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-xl">System Performance</CardTitle>
-                    <CardDescription>Real-time operational metrics</CardDescription>
+                    <CardTitle className="text-xl">System Health</CardTitle>
+                    <CardDescription>Overall platform performance metrics</CardDescription>
                   </div>
                   <Badge variant="outline" className="border-emerald-500/20 bg-emerald-500/10 text-emerald-500">
                     <CheckCircle className="w-3 h-3 mr-1" />
-                    All Systems Operational
+                    System Healthy
                   </Badge>
                 </div>
               </CardHeader>
@@ -123,10 +176,10 @@ export default function Dashboard() {
                 <div className="space-y-6">
                   <div>
                     <div className="flex justify-between mb-2">
-                      <span className="text-sm font-medium text-foreground">Compliance Score</span>
-                      <span className="text-sm font-bold text-emerald-500">{stats.complianceScore}%</span>
+                      <span className="text-sm font-medium text-foreground">System Health Score</span>
+                      <span className="text-sm font-bold text-emerald-500">{stats.systemHealth}%</span>
                     </div>
-                    <Progress value={stats.complianceScore} className="h-2" />
+                    <Progress value={stats.systemHealth} className="h-2" />
                   </div>
 
                   <div className="grid grid-cols-3 gap-4">
@@ -143,15 +196,15 @@ export default function Dashboard() {
                         <Target className="w-4 h-4 text-emerald-500" />
                         <span className="text-xs text-muted-foreground">Success Rate</span>
                       </div>
-                      <p className="text-2xl font-bold text-foreground">96.4%</p>
+                      <p className="text-2xl font-bold text-foreground">{stats.systemHealth}%</p>
                     </div>
 
                     <div className="p-4 bg-secondary rounded-lg">
                       <div className="flex items-center gap-2 mb-2">
-                        <Zap className="w-4 h-4 text-amber-500" />
-                        <span className="text-xs text-muted-foreground">Tools Active</span>
+                        <CheckCircle className="w-4 h-4 text-emerald-500" />
+                        <span className="text-xs text-muted-foreground">Successful</span>
                       </div>
-                      <p className="text-2xl font-bold text-foreground">{stats.activeTools}</p>
+                      <p className="text-2xl font-bold text-foreground">{stats.successfulExecutions}</p>
                     </div>
                   </div>
                 </div>
@@ -160,26 +213,58 @@ export default function Dashboard() {
 
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Banking Operations</CardTitle>
-                <CardDescription>AI-powered tools for commercial banking</CardDescription>
+                <CardTitle className="text-xl">Agent Performance</CardTitle>
+                <CardDescription>Real-time execution metrics by agent</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[
-                    { name: "Customer Onboarding", count: 847, icon: Users, color: "blue" },
-                    { name: "Fraud Detection", count: 34, icon: Shield, color: "red" },
-                    { name: "Compliance Checks", count: 1203, icon: CheckCircle, color: "emerald" },
-                    { name: "Risk Assessment", count: 562, icon: TrendingUp, color: "amber" },
-                  ].map((op) => (
+                <div className="space-y-4">
+                  {agentPerformance.map((agent) => (
                     <div
-                      key={op.name}
-                      className="p-4 bg-secondary rounded-lg hover:bg-secondary/80 transition-colors cursor-pointer"
+                      key={agent.name}
+                      className="p-4 bg-secondary rounded-lg hover:bg-secondary/80 transition-colors"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <op.icon className={`w-5 h-5 text-${op.color}-500`} />
-                        <span className="text-2xl font-bold text-foreground">{op.count}</span>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="font-semibold text-foreground">{agent.name}</h4>
+                            <Badge
+                              variant="outline"
+                              className={
+                                agent.status === "healthy"
+                                  ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600"
+                                  : agent.status === "warning"
+                                  ? "border-amber-500/20 bg-amber-500/10 text-amber-600"
+                                  : "border-rose-500/20 bg-rose-500/10 text-rose-600"
+                              }
+                            >
+                              {agent.status === "healthy" && <CheckCircle className="w-3 h-3 mr-1" />}
+                              {agent.status === "warning" && <AlertTriangle className="w-3 h-3 mr-1" />}
+                              {agent.status === "critical" && <AlertCircle className="w-3 h-3 mr-1" />}
+                              {agent.status}
+                            </Badge>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{agent.runs} runs today</p>
+                        </div>
+                        {agent.issues > 0 && (
+                          <Badge variant="destructive" className="ml-2">
+                            {agent.issues} issues
+                          </Badge>
+                        )}
                       </div>
-                      <p className="text-sm font-medium text-muted-foreground">{op.name}</p>
+                      
+                      <div className="grid grid-cols-2 gap-4 mt-3">
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Success Rate</p>
+                          <div className="flex items-center gap-2">
+                            <Progress value={agent.success} className="h-1.5 flex-1" />
+                            <span className="text-sm font-semibold text-foreground">{agent.success}%</span>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Avg Time</p>
+                          <p className="text-sm font-semibold text-foreground">{agent.avgTime}s</p>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -187,27 +272,42 @@ export default function Dashboard() {
             </Card>
           </div>
 
-          {/* Right Column - Alerts */}
+          {/* Right Column - Issues & Actions */}
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">Recent Alerts</CardTitle>
-                <CardDescription>Critical system notifications</CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-xl">Recent Issues</CardTitle>
+                    <CardDescription>Agent & tool execution problems</CardDescription>
+                  </div>
+                  <Badge variant="destructive">8 active</Badge>
+                </div>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  {recentAlerts.map((alert, i) => (
-                    <div key={i} className="p-4 bg-secondary rounded-lg border-l-4 border-l-blue-500">
+                  {recentIssues.map((issue, i) => (
+                    <div 
+                      key={i} 
+                      className={`p-4 bg-secondary rounded-lg border-l-4 ${
+                        issue.severity === "critical" ? "border-l-rose-500" : "border-l-amber-500"
+                      }`}
+                    >
                       <div className="flex items-start justify-between mb-2">
                         <Badge
-                          variant={alert.severity === "critical" ? "destructive" : "secondary"}
+                          variant={issue.severity === "critical" ? "destructive" : "secondary"}
                           className="text-xs"
                         >
-                          {alert.severity}
+                          {issue.severity}
                         </Badge>
-                        <span className="text-xs text-muted-foreground">{alert.time}</span>
+                        <span className="text-xs text-muted-foreground">{issue.time}</span>
                       </div>
-                      <p className="text-sm text-foreground font-medium">{alert.message}</p>
+                      <p className="text-sm font-semibold text-foreground mb-1">{issue.agent}</p>
+                      <p className="text-xs text-muted-foreground mb-2">Tool: {issue.tool}</p>
+                      <p className="text-sm text-foreground">{issue.message}</p>
+                      <Link href={`/audit/${issue.executionId}`} className="text-xs text-blue-500 hover:underline mt-2 inline-block">
+                        View execution details →
+                      </Link>
                     </div>
                   ))}
                 </div>
@@ -225,16 +325,22 @@ export default function Dashboard() {
                     Create New Agent
                   </Button>
                 </Link>
-                <Link href="/tools">
+                <Link href="/tools/create">
                   <Button className="w-full justify-start bg-transparent" variant="outline">
-                    <BarChart3 className="w-4 h-4 mr-2" />
-                    View Tools Library
+                    <Settings className="w-4 h-4 mr-2" />
+                    Create New Tool
                   </Button>
                 </Link>
                 <Link href="/audit">
                   <Button className="w-full justify-start bg-transparent" variant="outline">
                     <Activity className="w-4 h-4 mr-2" />
-                    Audit Logs
+                    View All Executions
+                  </Button>
+                </Link>
+                <Link href="/documentation">
+                  <Button className="w-full justify-start bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+                    <BarChart3 className="w-4 h-4 mr-2" />
+                    API Documentation
                   </Button>
                 </Link>
               </CardContent>
