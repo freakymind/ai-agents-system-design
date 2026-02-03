@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Users, Settings, Plus, Activity, Home, Menu, X, Shield, Sparkles } from "lucide-react"
+import { Users, Settings, Plus, Activity, Home, Menu, X, Shield, Sparkles, BookOpen } from "lucide-react"
 
 export function Navigation() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -30,6 +30,11 @@ export function Navigation() {
       name: "Monitoring",
       href: "/audit",
       icon: Activity,
+    },
+    {
+      name: "Documentation",
+      href: "/documentation",
+      icon: BookOpen,
     },
   ]
 
